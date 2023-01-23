@@ -7,6 +7,8 @@ import lombok.*;
 @Getter
 @Builder
 @ToString
+@EqualsAndHashCode
+
 public class Player {
     private Integer id;
     private String name;

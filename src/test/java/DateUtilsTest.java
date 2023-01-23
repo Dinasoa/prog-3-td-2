@@ -10,18 +10,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class DateUtilsTest {
     DateUtils dateUtils = new DateUtils();
 
-    @Test
-    void hello_test_ok() {
-        assertEquals(1, 1);
-    }
 
     @Test
-    void parse_date_ok() {
-        assertEquals(LocalDate.now().toString(), dateUtils.parseDate(Instant.now()));
+    void hello(){ assertEquals(1,1); }
+
+//    Test the method parseDate function
+    @Test
+    void parse_date_ok(){
+        assertEquals(LocalDate.now().toString() , dateUtils.parseDate(Instant.now()));
     }
 
+//    AssertThrows( expection expected, function executed )
     @Test
-    void parse_date_ko() {
-        assertThrows(NullPointerException.class, () -> dateUtils.parseDate(null));
+    void parse_date_ko(){
+        assertThrows( NullPointerException.class , () -> dateUtils.parseDate(null));
     }
+
 }

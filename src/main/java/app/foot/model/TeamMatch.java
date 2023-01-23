@@ -13,4 +13,5 @@ public class TeamMatch {
     private Team team;
     private Integer score;
     private List<PlayerScorer> scorers;
+
 }

@@ -9,9 +9,10 @@ import java.util.List;
 @Entity(name = "match")
 @Data
 @EqualsAndHashCode
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+
 public class MatchEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -13,9 +13,10 @@ import lombok.NoArgsConstructor;
 @Entity(name = "team")
 @Data
 @EqualsAndHashCode
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+
 public class TeamEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

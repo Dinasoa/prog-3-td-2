@@ -7,6 +7,8 @@ import lombok.*;
 @Builder
 @Getter
 @ToString
+@EqualsAndHashCode
+
 public class PlayerScorer {
     private Player player;
     private Integer minute;
