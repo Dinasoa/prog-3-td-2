@@ -8,14 +8,16 @@ import app.foot.repository.TeamRepository;
 import app.foot.repository.entity.MatchEntity;
 import app.foot.repository.entity.PlayerEntity;
 import app.foot.repository.entity.PlayerScoreEntity;
+import app.foot.repository.entity.TeamEntity;
 import app.foot.repository.mapper.PlayerMapper;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static utils.TestUtils.*;
@@ -99,5 +101,44 @@ public class PlayerMapperTest {
                 .ownGoal(false)
                 .match(matchEntity1)
                 .build(), actual);
+    }
+
+    @Test
+    void toEntity_ok() {
+        when(teamRepositoryMock.findByName("Barea")).thenReturn(TeamEntity.builder()
+                        .name("Barea")
+                        .id(2)
+                .build()) ;
+        PlayerEntity actual = subject.toEntity(Player.builder()
+                .id(1)
+                .name("Rakoto")
+                .isGuardian(false)
+                .teamName("Barea")
+                .build()) ;
+
+        assertEquals(PlayerEntity.builder()
+                .team(TeamEntity.builder()
+                        .name("Barea")
+                        .id(2)
+                        .build())
+                .name("Rakoto")
+                .guardian(false)
+                .id(1)
+                .build() , actual);
+    }
+
+    @Test
+    void toEntity_ko(){
+        when(teamRepositoryMock.findByName("bob")).thenThrow() ;
+
+        assertThrows(RuntimeException.class , () -> subject.toEntity(
+                Player.builder()
+                        .id(1)
+                        .name("Rakoto")
+                        .isGuardian(false)
+                        .teamName("bob")
+                        .build()
+        )) ;
+
     }
 }

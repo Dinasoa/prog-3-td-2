@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -18,8 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @SpringBootTest(classes = FootApi.class)
 @AutoConfigureMockMvc
@@ -88,6 +88,44 @@ class PlayerIntegrationTest {
         assertEquals(toCreate, actual.get(0).toBuilder().id(null).build());
     }
 
+    @Test
+    void update_players_ok() throws Exception {
+        Player toCreate = Player.builder()
+                .id(6)
+                .name("Rakoto")
+                .isGuardian(false)
+                .teamName("E1")
+                .build();
+
+        MockHttpServletResponse response = mockMvc.perform(put("/players")
+                        .content(objectMapper.writeValueAsString(List.of(toCreate)))
+                        .contentType("application/json")
+                        .accept("application/json"))
+                .andReturn()
+                .getResponse();
+
+        assertEquals(HttpStatus.OK.value() , response.getStatus());
+    }
+
+    @Test
+    void update_players_ko() throws java.lang.Exception {
+        Player player = Player.builder()
+                .teamName("E3")
+                .isGuardian(false)
+                .name("Dinasoa")
+                .build();
+
+        MockHttpServletResponse response = mockMvc
+                .perform(put("/players")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(player))
+                        .accept(MediaType.APPLICATION_JSON)
+                ).andReturn()
+                .getResponse();
+
+        assertEquals(HttpStatus.BAD_REQUEST.value() , response.getStatus());
+    }
+
     private List<Player> convertFromHttpResponse(MockHttpServletResponse response)
             throws JsonProcessingException, UnsupportedEncodingException {
         CollectionType playerListType = objectMapper.getTypeFactory()
@@ -96,4 +134,5 @@ class PlayerIntegrationTest {
                 response.getContentAsString(),
                 playerListType);
     }
+
 }

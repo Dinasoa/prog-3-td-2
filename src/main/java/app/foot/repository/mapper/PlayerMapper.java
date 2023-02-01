@@ -52,4 +52,22 @@ public class PlayerMapper {
                 .guardian(domain.getIsGuardian())
                 .build();
     }
+
+    public app.foot.controller.rest.Player toRest(PlayerEntity entity){
+        return app.foot.controller.rest.Player.builder()
+                .isGuardian(entity.isGuardian())
+                .teamName(entity.getTeam() == null ? null : entity.getTeam().getName())
+                .name(entity.getName())
+                .id(entity.getId())
+                .build() ;
+    }
+
+    public PlayerEntity toEntity(app.foot.controller.rest.Player player){
+        return PlayerEntity.builder()
+                .id(player.getId())
+                .guardian(player.getIsGuardian())
+                .team(teamRepository.findByName(player.getName()))
+                .name(player.getName())
+                .build() ;
+    }
 }
